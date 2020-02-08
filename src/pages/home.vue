@@ -1,17 +1,18 @@
 <template>
-    <div>
-        <NavHeaderVue></NavHeaderVue>
-            <router-view></router-view>
-        <NavFooterVue></NavFooterVue>
-        
-    </div>
+  <div>
+      home page
+    <nav-header></nav-header> <!--这个是 component 中的name-->
+    <router-view></router-view>
+    <nav-footer></nav-footer>
+  </div>
 </template>
 
 <script>
-import NavHeaderVue from '../components/NavHeader.vue'
-import NavFooterVue from '../components/NavFooter.vue'
-
+import NavHeader from '../components/NavHeader'
+import NavFooter from '../components/NavFooter'
 export default {
-    
-}
+  name: "home",
+  components:{ NavHeader, NavFooter},
+
+};
 </script>

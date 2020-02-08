@@ -1,12 +1,14 @@
 <template>
   <div>
-      order pay page
+      order footer
   </div>
 </template>
 
 <script>
-export default {
 
+
+export default {
+    components: {}
 }
 </script>
 
