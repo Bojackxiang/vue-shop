@@ -5,9 +5,13 @@
 </template>
 
 <script>
+import storage from './storage/index'
 
 export default {
-  
+  mounted(){
+    storage.setItem('a', 1)
+
+  }
   
 }
 </script>
