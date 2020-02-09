@@ -1,6 +1,5 @@
 <template>
   <div>
-      home page
     <nav-header></nav-header> <!--这个是 component 中的name-->
     <router-view></router-view>
     <nav-footer></nav-footer>

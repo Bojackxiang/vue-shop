@@ -14,9 +14,13 @@ export default {
     };
   },
   mounted() {
-    this.axios.get("/user/login").then(mockResp => {
-      this.res = mockResp;
-    });
+    // this.axios.get("/user/login").then(mockResp => {
+    //   this.res = mockResp;
+    // });
   }
 };
 </script>
+
+<style lang="sass">
+  @import './assets/scss/reset.scss'
+</style>
