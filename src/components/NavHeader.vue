@@ -24,8 +24,67 @@
         </div>
         <div class="header-menu">
           <div class="item-menu">
+            <!-- 幕布的button -->
             <span>phones</span>
-            <div class="children"></div>
+            <div class="children">
+              <!-- 目录的下拉部分 -->
+              <ul>
+                <li class="product">
+                  <a href="/" target="_blank">
+                    <div class="pro-img">
+                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
+                    </div>
+                    <div class="pro-name">电视</div>
+                    <div class="pro-price">7444</div>
+                  </a>
+                </li>
+                <li class="product">
+                  <a href="/" target="_blank">
+                    <div class="pro-img">
+                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
+                    </div>
+                    <div class="pro-name">电视</div>
+                    <div class="pro-price">7444</div>
+                  </a>
+                </li>
+                <li class="product">
+                  <a href="/" target="_blank">
+                    <div class="pro-img">
+                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
+                    </div>
+                    <div class="pro-name">电视</div>
+                    <div class="pro-price">7444</div>
+                  </a>
+                </li>
+                <li class="product">
+                  <a href="/" target="_blank">
+                    <div class="pro-img">
+                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
+                    </div>
+                    <div class="pro-name">电视</div>
+                    <div class="pro-price">7444</div>
+                  </a>
+                </li>
+                <li class="product">
+                  <a href="/" target="_blank">
+                    <div class="pro-img">
+                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
+                    </div>
+                    <div class="pro-name">电视</div>
+                    <div class="pro-price">7444</div>
+                  </a>
+                </li>
+                <li class="product">
+                  <a href="/" target="_blank">
+                    <div class="pro-img">
+                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
+                    </div>
+                    <div class="pro-name">电视</div>
+                    <div class="pro-price">7444</div>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
           <div class="item-menu">
             <span>red mi</span>
@@ -60,7 +119,8 @@ export default {
 
 <style lang="scss">
 @import "../assets/scss/base.scss";
-@import '../assets/scss/mixin.scss';
+@import "../assets/scss/mixin.scss";
+@import "../assets/scss/config.scss";
 .header {
   .nav-topbar {
     height: 39px;
@@ -68,7 +128,7 @@ export default {
     background-color: #333333;
     color: #b0b0b0;
     .container {
-      @include flex()
+      @include flex();
       a {
         display: inline-block;
         color: #b0b0b0;
@@ -80,11 +140,9 @@ export default {
         text-align: center;
         color: #ffffff;
         .icon-cart {
-          display: inline-block;
           height: 12px;
           width: 16px;
-          background: url("../../public/imgs/icon-cart.png") no-repeat center;
-          background-size: contain;
+          @include backgroundImg("../../public/imgs/icon-cart.png");
           margin-right: 4px;
         }
       }
@@ -94,6 +152,7 @@ export default {
     height: 112px;
     @include flex();
     .container {
+      position: relative; // 这里我不是很明白，为什么外面relative，里面就能正常显示
       @include flex();
       .header-logo {
         display: inline-block;
@@ -102,7 +161,7 @@ export default {
         background-color: #ff6600;
         /**
          * note: 下面这一块太重要了真的是知识点！！！ 
-         * (^ ^) before after 的使用
+         * before after 的使用
          */
         a {
           display: inline-block;
@@ -110,18 +169,14 @@ export default {
           height: 55px;
           &:before {
             content: " "; // 这个content也是必须要加的，是一个占位
-            display: inline-block;
-            background: url("../../public/imgs/mi-logo.png") no-repeat center;
-            background-size: contain;
+            @include backgroundImg("../../public/imgs/mi-logo.png");
             width: 55px;
             height: 55px;
             transition: margin 0.2s;
           }
           &:after {
             content: " ";
-            display: inline-block;
-            background: url("../../public/imgs/mi-home.png") no-repeat center;
-            background-size: contain;
+            @include backgroundImg("../../public/imgs/mi-home.png");
             width: 55px;
             height: 55px;
           }
@@ -144,13 +199,68 @@ export default {
           span {
             cursor: pointer;
           }
+          &:hover {
+            color: $colorA;
+            .children {
+              height: 220px;
+              z-index: 999;
+            }
+          }
+          .children {
+            position: absolute;
+            top: 112px;
+            left: 0;
+            width: 1226px;
+            border-top: 1px solid #e55555;
+            box-shadow: 0px 7px 6px 0px rgba(0, 0, 0, 0.11);
+            line-height: 12px;
+            .product {
+              float: left;
+              width: 16.6%;
+              height: 220px;
+              font-size: 12px;
+              text-align: center;
+              position: relative; // 再一次出现： 用relative的情况解决了absolute的问题
+              img {
+                height: 111px;
+                width: auto;
+                display: block;
+                margin: 0 auto;
+                margin-top: 26px;
+              }
+              a {
+                display: inline-block; // 当a没有办法装满整个子元素的时候，使用inline-block就可以了
+              }
+              .pro-name {
+                font-weight: bold;
+                margin-top: 19px;
+                margin-bottom: 8px;
+                color: $colorB;
+              }
+              .pro-price {
+                color: $colorA;
+              }
+              &:before {
+                content: " ";
+                position: absolute; // note: 子类元素都会找上一个position在哪里，然后根据上一个position来进行定位
+                top: 28px;
+                right: 0;
+                border-left: 1px solid $colorF;
+                height: 100px;
+                width: 1px;
+              }
+              &:last-child:before{ // note: 把最后一个before元素隐藏起来
+                display: none;
+              }
+            }
+          }
         }
       }
       .header-search {
         width: 319px;
         .wrapper {
           display: flex;
-          align-items:center;
+          align-items: center;
           border: 1px solid #e0e0e0;
           height: 50px;
           input {
@@ -161,12 +271,10 @@ export default {
             height: 50px;
             padding-left: 10px;
           }
-          a{
-            display: inline-block;
-            width: 18px; 
+          a {
+            width: 18px;
             height: 18px;
-            background: url('../../public/imgs/icon-search.png') no-repeat center;
-            background-size: contain;
+            @include backgroundImg("../../public/imgs/icon-search.png");
             margin-left: 10px;
           }
         }

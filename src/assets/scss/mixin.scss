@@ -5,3 +5,9 @@
     justify-content: $hov;
     align-items: $col;
 }
+
+@mixin backgroundImg($background:''){
+    display: inline-block;
+    background: url($background) no-repeat center;
+    background-size: contain;
+}
