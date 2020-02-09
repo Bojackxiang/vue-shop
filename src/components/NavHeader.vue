@@ -84,19 +84,17 @@
                   </a>
                 </li>
               </ul>
+              <!-- 目录的下拉部分 (end)-->
             </div>
           </div>
           <div class="item-menu">
             <span>red mi</span>
-            <div class="children"></div>
           </div>
           <div class="item-menu">
             <span>tv</span>
-            <div class="children"></div>
           </div>
           <div class="item-menu">
             <span>phones</span>
-            <div class="children"></div>
           </div>
         </div>
         <div class="header-search">
@@ -113,7 +111,30 @@
 
 <script>
 export default {
-  name: "nav-header"
+  name: "nav-header",
+  data() {
+    return {
+      username: "weijie",
+      phoneList: []
+    };
+  },
+  mounted() {
+    this.getProductList();
+  },
+  methods: {
+    getProductList() {
+      this.axios
+        .get("/products", {
+          params:{
+            categoryId:'100012',
+            pageSize:6
+          }
+        })
+        .then(res => {
+          console.log(res);
+        });
+    }
+  }
 };
 </script>
 
@@ -203,17 +224,22 @@ export default {
             color: $colorA;
             .children {
               height: 220px;
-              z-index: 999;
+              // z-index: 999;
+              opacity: 1;
             }
           }
           .children {
             position: absolute;
+            height: 0;
             top: 112px;
             left: 0;
             width: 1226px;
             border-top: 1px solid #e55555;
             box-shadow: 0px 7px 6px 0px rgba(0, 0, 0, 0.11);
             line-height: 12px;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s;
             .product {
               float: left;
               width: 16.6%;
@@ -249,7 +275,8 @@ export default {
                 height: 100px;
                 width: 1px;
               }
-              &:last-child:before{ // note: 把最后一个before元素隐藏起来
+              &:last-child:before {
+                // note: 把最后一个before元素隐藏起来
                 display: none;
               }
             }
