@@ -3,6 +3,7 @@ let baseURL;
 switch (process.env.NODE_ENV) {
   case "development":
     baseURL = "http://dev-mall-pre.springboot.cn/api";
+    // baseURL = 'https://jsonplaceholder.typicode.com/'
     break;
   case "production":
     baseURL = "http://dev-mall-pre.springboot.cn/api";
