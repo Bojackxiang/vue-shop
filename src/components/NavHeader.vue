@@ -22,8 +22,31 @@
         <div class="header-logo">
           <a href="/#/index"></a>
         </div>
-        <div class="header-menu"></div>
-        <div class="header-search"></div>
+        <div class="header-menu">
+          <div class="item-menu">
+            <span>phones</span>
+            <div class="children"></div>
+          </div>
+          <div class="item-menu">
+            <span>red mi</span>
+            <div class="children"></div>
+          </div>
+          <div class="item-menu">
+            <span>tv</span>
+            <div class="children"></div>
+          </div>
+          <div class="item-menu">
+            <span>phones</span>
+            <div class="children"></div>
+          </div>
+        </div>
+        <div class="header-search">
+          <div class="wrapper">
+            <input type="text" name="keyboard" />
+            <a href="javascript:;"></a>
+            <!--阻止刷新-->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -37,6 +60,7 @@ export default {
 
 <style lang="scss">
 @import "../assets/scss/base.scss";
+@import '../assets/scss/mixin.scss';
 .header {
   .nav-topbar {
     height: 39px;
@@ -44,9 +68,7 @@ export default {
     background-color: #333333;
     color: #b0b0b0;
     .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      @include flex()
       a {
         display: inline-block;
         color: #b0b0b0;
@@ -69,8 +91,10 @@ export default {
     }
   }
   .nav-header {
+    height: 112px;
+    @include flex();
     .container {
-      background-color: pink;
+      @include flex();
       .header-logo {
         display: inline-block;
         height: 55px;
@@ -85,7 +109,7 @@ export default {
           width: 110px;
           height: 55px;
           &:before {
-            content: " ";
+            content: " "; // 这个content也是必须要加的，是一个占位
             display: inline-block;
             background: url("../../public/imgs/mi-logo.png") no-repeat center;
             background-size: contain;
@@ -104,6 +128,46 @@ export default {
           &:hover:before {
             margin-left: -55px;
             transition: margin 0.2s;
+          }
+        }
+      }
+      .header-menu {
+        display: inline-block;
+        width: 500px;
+        .item-menu {
+          display: inline-block;
+          color: #333333;
+          font-weight: bold;
+          font-size: 16px;
+          line-height: 112px;
+          margin-right: 20px;
+          span {
+            cursor: pointer;
+          }
+        }
+      }
+      .header-search {
+        width: 319px;
+        .wrapper {
+          display: flex;
+          align-items:center;
+          border: 1px solid #e0e0e0;
+          height: 50px;
+          input {
+            border: none;
+            display: flex;
+            border-right: 1px solid #e0e0e0;
+            width: 264px;
+            height: 50px;
+            padding-left: 10px;
+          }
+          a{
+            display: inline-block;
+            width: 18px; 
+            height: 18px;
+            background: url('../../public/imgs/icon-search.png') no-repeat center;
+            background-size: contain;
+            margin-left: 10px;
           }
         }
       }

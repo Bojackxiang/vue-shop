@@ -1,0 +1,7 @@
+
+// 定义mixins的func 并且重复使用
+@mixin flex($hov:space-between, $col:center) {
+    display: flex;
+    justify-content: $hov;
+    align-items: $col;
+}
