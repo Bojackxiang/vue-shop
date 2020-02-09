@@ -9,9 +9,11 @@
           <a href="javascript:;">rules</a>
         </div>
         <div class="topbar-user">
-          <a href="javascript:;">sign in</a>
-          <a href="javascript:;">sign up</a>
-          <a href="javascript:;" class="my-cart">
+          <a href="javascript:;" v-if="username">{{username}}</a>
+          <a href="javascript:;" v-if="username">我的订单</a>
+          <a href="javascript:;" v-if="!username" @click="login">登陆</a>
+          <a href="javascript:;" v-if="!username">注册</a>
+          <a href="javascript:;" class="my-cart" @click="goToCart">
             <span class="icon-cart"></span>cart
           </a>
         </div>
@@ -26,61 +28,18 @@
           <div class="item-menu">
             <!-- 幕布的button -->
             <span>phones</span>
+            <!-- 手机菜单展开图显示 -->
             <div class="children">
               <!-- 目录的下拉部分 -->
+              <!-- 属性是动态的（不是直接给上去的时候）就要加 -> :src -> 来做属性绑定 -->
               <ul>
-                <li class="product">
-                  <a href="/" target="_blank">
+                <li class="product" v-for="(item, index) in phoneList" :key="index">
+                  <a :href="'/#/product/'+item.id" target="_blank">
                     <div class="pro-img">
-                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
+                      <img :src="item.mainImage" alt="图片" />
                     </div>
-                    <div class="pro-name">电视</div>
-                    <div class="pro-price">7444</div>
-                  </a>
-                </li>
-                <li class="product">
-                  <a href="/" target="_blank">
-                    <div class="pro-img">
-                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
-                    </div>
-                    <div class="pro-name">电视</div>
-                    <div class="pro-price">7444</div>
-                  </a>
-                </li>
-                <li class="product">
-                  <a href="/" target="_blank">
-                    <div class="pro-img">
-                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
-                    </div>
-                    <div class="pro-name">电视</div>
-                    <div class="pro-price">7444</div>
-                  </a>
-                </li>
-                <li class="product">
-                  <a href="/" target="_blank">
-                    <div class="pro-img">
-                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
-                    </div>
-                    <div class="pro-name">电视</div>
-                    <div class="pro-price">7444</div>
-                  </a>
-                </li>
-                <li class="product">
-                  <a href="/" target="_blank">
-                    <div class="pro-img">
-                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
-                    </div>
-                    <div class="pro-name">电视</div>
-                    <div class="pro-price">7444</div>
-                  </a>
-                </li>
-                <li class="product">
-                  <a href="/" target="_blank">
-                    <div class="pro-img">
-                      <img src="http://mi.futurefe.com/imgs/nav-img/nav-3-1.jpg" alt />
-                    </div>
-                    <div class="pro-name">电视</div>
-                    <div class="pro-price">7444</div>
+                    <div class="pro-name">{{item.name}}</div>
+                    <div class="pro-price">{{item.price | currency}}元</div>
                   </a>
                 </li>
               </ul>
@@ -89,6 +48,23 @@
           </div>
           <div class="item-menu">
             <span>red mi</span>
+            <!-- 红米手机展开图显示 -->
+            <div class="children">
+              <!-- 目录的下拉部分 -->
+              <!-- 属性是动态的（不是直接给上去的时候）就要加 -> :src -> 来做属性绑定 -->
+              <ul>
+                <li class="product" v-for="(item, index) in phoneList" :key="index">
+                  <a :href="'/#/product/'+item.id" target="_blank">
+                    <div class="pro-img">
+                      <img :src="item.mainImage" alt="图片" />
+                    </div>
+                    <div class="pro-name">{{item.name}}</div>
+                    <div class="pro-price">{{item.price | currency}}元</div>
+                  </a>
+                </li>
+              </ul>
+              <!-- 目录的下拉部分 (end)-->
+            </div>
           </div>
           <div class="item-menu">
             <span>tv</span>
@@ -114,7 +90,7 @@ export default {
   name: "nav-header",
   data() {
     return {
-      username: "weijie",
+      username: "",
       phoneList: []
     };
   },
@@ -131,8 +107,20 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
+          this.phoneList = res.list
         });
+    },
+    goToCart(){
+      this.$router.push('/cart').catch(() => {})
+    },
+    login(){
+      this.$router.push('/login').catch(() => {}) // 避免dulicate 的报错
+    }
+  },
+  filters: {
+    currency(val){
+      if (!val) return "0.00"
+      return `¥ ${val.toFixed(2)}元`;
     }
   }
 };

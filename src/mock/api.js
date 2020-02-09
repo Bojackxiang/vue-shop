@@ -1,6 +1,6 @@
 import Mock from 'mockjs';
 
-let data = Mock.mock("/user/login", {
+Mock.mock("/user/login", {
   status: 0,
   data: {
     id: 12,
@@ -13,4 +13,3 @@ let data = Mock.mock("/user/login", {
   }
 });
 
-console.log(data);
