@@ -228,6 +228,7 @@ export default {
             opacity: 0;
             overflow: hidden;
             transition: all 0.5s;
+            background-color: white;
             .product {
               float: left;
               width: 16.6%;
