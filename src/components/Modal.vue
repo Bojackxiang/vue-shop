@@ -7,7 +7,7 @@
       <!-- modal 主体-->
       <div class="modal-dialog">
         <div class="modal-header">
-          <span>标题</span>
+          <span>{{modalTitle}}</span>
           <a href="javascript:;" class="icon-close" @click="$emit('cancel')"></a>
         </div>
         <div class="modal-body">
@@ -15,7 +15,7 @@
         </div>
         <div class="modal-footer">
           <!-- 子组件调用父组件的func-->
-          <a href="javascript:;" class="btn" v-if="btnType==1" @click="$emit('submit')">确定</a>
+          <a href="javascript:;" class="btn" v-if="btnType==1" @click="$emit('submit')">{{sureText}}</a>
           <a href="javascript:;" class="btn" v-if="btnType==2" @click="$emit('cancel')">确定</a>
           <div class="btn-group" v-if="btnType==3">
             <a href="javascript:;" class="btn">确定</a>

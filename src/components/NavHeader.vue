@@ -36,7 +36,7 @@
                 <li class="product" v-for="(item, index) in phoneList" :key="index">
                   <a :href="'/#/product/'+item.id" target="_blank">
                     <div class="pro-img">
-                      <img :src="item.mainImage" alt="图片" />
+                      <img v-lazy="item.mainImage" alt="图片" />
                     </div>
                     <div class="pro-name">{{item.name}}</div>
                     <div class="pro-price">{{item.price | currency}}元</div>
@@ -56,7 +56,7 @@
                 <li class="product" v-for="(item, index) in phoneList" :key="index">
                   <a :href="'/#/product/'+item.id" target="_blank">
                     <div class="pro-img">
-                      <img :src="item.mainImage" alt="图片" />
+                      <img v-lazy="item.mainImage" alt="图片" />
                     </div>
                     <div class="pro-name">{{item.name}}</div>
                     <div class="pro-price">{{item.price | currency}}元</div>

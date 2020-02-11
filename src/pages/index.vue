@@ -12,7 +12,7 @@
                 <ul v-for="(item, index1) in menuList" :key="index1">
                   <li v-for="(product, index2) in item" :key="index2">
                     <a :href="'/#/product/'+product.id">
-                      <img :src="product.img ? product.img : '/imgs/item-box-1.png'" alt />
+                      <img v-lazy="product.img ? product.img : '/imgs/item-box-1.png'" alt />
                       {{product.name || "小米9"}}
                     </a>
                   </li>
@@ -51,7 +51,7 @@
           <!-- slides -->
           <swiper-slide v-for="(item, index) in sliderList" :key="index">
             <a href="'/#/product/'+item.id">
-              <img class="swpier-image" :src="item.image" alt />
+              <img class="swpier-image" v-lazy="item.image" alt />
             </a>
           </swiper-slide>
           <!-- slides control  -->
@@ -65,7 +65,7 @@
       <!-- 广告位 x4 -->
       <div class="ads-box">
         <a v-for="(ad, index) in ads" :key="index" :href="`/#/product/${ad.id}`">
-          <img :src="ad.image" alt />
+          <img v-lazy="ad.image" alt />
         </a>
       </div>
       <!-- 广告位 x4 end-->
@@ -96,7 +96,7 @@
               <div class="item" v-for="(col, index) in row" :key="index">
                 <span :class="index%2==0 ? 'new-pro' : 'kill-pro'">新品</span>
                 <div class="item-img">
-                  <img :src="col.mainImage" alt />
+                  <img v-lazy="col.mainImage" alt />
                 </div>
                 <div class="item-info">
                   <h3>{{col.name}}</h3>
