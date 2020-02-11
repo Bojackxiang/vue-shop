@@ -9,7 +9,8 @@ import OrderPage from "../pages/order.vue";
 import OrderConfirmPage from "../pages/orderConfirm.vue";
 import OrderListPage from "../pages/orderList.vue";
 import OrderPayPage from "../pages/orderpay.vue";
-import Alipay from '../pages/alipay.vue'
+import Alipay from "../pages/alipay.vue";
+import Login from "../pages/login.vue";
 
 //note: telling vue to use the router
 Vue.use(VueRouter);
@@ -69,10 +70,15 @@ const routes = [
     component: OrderPayPage
   },
   {
-    path: '/alipay',
-    name: 'alipay',
+    path: "/alipay",
+    name: "alipay",
     component: Alipay
-
+  },
+  //note:  log in 页面
+  {
+    path: "/login",
+    name: "login",
+    component: Login
   }
 ];
 

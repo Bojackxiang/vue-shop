@@ -72,7 +72,7 @@
 
       <!-- 广告banner -->
       <div class="banner">
-        <a href>
+        <a href='javascript:;'>
           <img src="/imgs/banner-1.png" alt />
         </a>
       </div>

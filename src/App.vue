@@ -14,9 +14,24 @@ export default {
     };
   },
   mounted() {
-    // this.axios.get("/user/login").then(mockResp => {
-    //   this.res = mockResp;
-    // });
+    this.getUser();
+  },
+  methods:{
+    // * 在这里尝试拉取用户信息
+    getUser(){
+      this.axios.get('/user/')
+      .then(resp => {
+        console.log(resp)
+      })
+      // todo: 保存到vuex里面
+    },
+    // * 获取用户的购物车的信息
+    getCart(){
+      this.axios.get('/carts/products/sum')
+      .then(res => {
+        console.log(res)
+      })
+    } 
   }
 };
 </script>
