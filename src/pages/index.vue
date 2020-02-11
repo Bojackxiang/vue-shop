@@ -1,6 +1,5 @@
 <template>
   <div class="index">
-    <div>我是首页</div>
     <div class="container">
       <!-- 轮播图 -->
       <div class="swiper-box">
@@ -63,11 +62,63 @@
       </div>
       <!-- 轮播图 end-->
 
-      <div class="ads-box"></div>
+      <!-- 广告位 x4 -->
+      <div class="ads-box">
+        <a v-for="(ad, index) in ads" :key="index" :href="`/#/product/${ad.id}`">
+          <img :src="ad.image" alt />
+        </a>
+      </div>
+      <!-- 广告位 x4 end-->
 
-      <div class="banner"></div>
+      <!-- 广告banner -->
+      <div class="banner">
+        <a href>
+          <img src="/imgs/banner-1.png" alt />
+        </a>
+      </div>
+      <!-- 广告banner end-->
 
-      <div class="product-box"></div>
+      <!-- 产品和竖着的banner -->
+      <div class="product-box">
+        <h2>手机</h2>
+        <div class="wrapper">
+          <!-- 左边的banner -->
+          <div class="banner-left">
+            <a href="`/#/products/35`">
+              <img src="/imgs/mix-alpha.jpg" alt />
+            </a>
+          </div>
+          <!-- 左边的banner end-->
+
+          <!-- 产品列表 -->
+          <div class="list-box">
+            <div class="list" v-for="(row, index) in phoneList" :key="index">
+              <div class="item" v-for="(col, index) in row" :key="index">
+                <span :class="index%2==0 ? 'new-pro' : 'kill-pro'">新品</span>
+                <div class="item-img">
+                  <img :src="col.mainImage" alt />
+                </div>
+                <div class="item-info">
+                  <h3>{{col.name}}</h3>
+                  <p>{{col.subtitle}}</p>
+                  <p class="price">{{col.price}}元</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 产品列表 end-->
+        </div>
+      </div>
+      <!-- 产品和竖着的banner end-->
+
+      <!-- model 的控制 -->
+      <Modal modalTitle="信息框" sureText="查看购物车" btnType="1" modalType="middle" :showModal="showModal">
+        <!-- ! 插槽的使用方式: 新知识 -->
+        <template v-solt:body>  
+          <p>商品添加成功</p>
+        </template>
+      </Modal>
+      <!-- model 的控制 end-->
     </div>
   </div>
 </template>
@@ -75,10 +126,11 @@
 <script>
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
+import Modal from "../components/Modal.vue";
 
 export default {
   name: "index",
-  components: { swiper, swiperSlide },
+  components: { swiper, swiperSlide, Modal },
   data() {
     return {
       swiperOption: {
@@ -145,12 +197,47 @@ export default {
         [1, 1, 1, 1],
         [1, 1, 1, 1],
         [1, 1, 1, 1]
-      ]
+      ],
+      ads: [
+        {
+          id: 33,
+          image: "/imgs/ads/ads-1.png"
+        },
+        {
+          id: 48,
+          image: "/imgs/ads/ads-2.jpg"
+        },
+        {
+          id: 45,
+          image: "/imgs/ads/ads-3.png"
+        },
+        {
+          id: 47,
+          image: "/imgs/ads/ads-4.jpg"
+        }
+      ],
+      phoneList: [],
+      showModal: true,
     };
+  },
+  mounted() {
+    this.init();
   },
   methods: {
     slideSwitch() {
       console.log("hello");
+    },
+    init() {
+      this.axios
+        .get("/products", {
+          params: {
+            categoryId: 100012,
+            pageSize: 8
+          }
+        })
+        .then(data => {
+          this.phoneList = [data.list.slice(0, 4), data.list.slice(4, 8)];
+        });
     }
   },
   computed: {
@@ -208,7 +295,7 @@ export default {
             }
             &:hover {
               background-color: $colorA;
-              .children{
+              .children {
                 // 这边对于现实的控制仅仅限制于 a 下面的子类
                 display: block;
               }
@@ -221,28 +308,137 @@ export default {
               top: 0;
               left: 265px;
               display: none;
-              ul{
+              ul {
                 display: flex;
                 justify-content: space-between;
                 height: 75px;
-                li{
+                li {
                   height: 75px;
                   line-height: 75px;
                   flex: 1;
                   padding-left: 23px;
                 }
-                img{
-                  width: 42px; 
+                img {
+                  width: 42px;
                   height: 35px;
                   vertical-align: middle;
                   margin-right: 15px;
                 }
-                a{
+                a {
                   color: $colorB;
-                  font-size:14px;
+                  font-size: 14px;
                 }
               }
-
+            }
+          }
+        }
+      }
+    }
+    .ads-box {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      a {
+        img {
+          height: 160px;
+        }
+      }
+    }
+    .banner {
+      width: 100%;
+      margin-top: 30px;
+      a {
+        img {
+          width: 100%;
+        }
+      }
+    }
+    .product-box {
+      // list box general 设置
+      background-color: $colorJ;
+      padding: 30px 0 50px;
+      h2 {
+        // 手机的字体的大小设置
+        font-size: $fontF;
+        height: 21px;
+        line-height: 21px;
+        color: $colorB;
+        margin-bottom: 20px;
+      }
+      .wrapper {
+        // 包裹着leftbanner和右边的 产品列表的东西
+        display: flex;
+        .banner-left {
+          margin-right: 16px;
+          img {
+            width: 224px;
+            height: 619px;
+          }
+        }
+        .list-box {
+          .list {
+            display: flex;
+            justify-content: space-between;
+            width: 986px; // note: list 要撑开才能完美的显示flex
+            margin-bottom: 14px;
+            &:last-child {
+              margin-bottom: 0;
+            }
+            .item {
+              width: 236px;
+              height: 302px;
+              background-color: $colorG;
+              text-align: center;
+              span {
+                display: inline-block;
+                width: 67px;
+                height: 24px;
+                font-size: 14px;
+                line-height: 24px;
+                &.new-pro {
+                  background-color: #7ecf68;
+                  color: white;
+                }
+                &.kill-pro {
+                  background-color: #e82626;
+                  color: white;
+                }
+              }
+              .item-img {
+                img {
+                  height: 195px;
+                  width: 100%;
+                }
+              }
+              .item-info {
+                h3 {
+                  font-size: $fontJ;
+                  color: $colorB;
+                  line-height: $fontJ;
+                  font-weight: bold;
+                }
+                p {
+                  color: $colorD;
+                  line-height: 13px;
+                  margin: 6px auto 13px;
+                }
+                .price {
+                  // 在price的内容后面加上一个购物车的logo => 在“后面”（after）伪类加上一个购物车
+                  // 在存在伪类的时候使用verticle align middle 是最好的使用场景
+                  color: #ff2200;
+                  font-size: $fontJ;
+                  font-weight: bold;
+                  cursor: pointer;
+                  &:after {
+                    content: "";
+                    margin-left: 10px;
+                    width: 22px;
+                    height: 22px;
+                    vertical-align: middle;
+                    @include backgroundImg("/imgs/icon-cart-hover.png");
+                  }
+                }
+              }
             }
           }
         }

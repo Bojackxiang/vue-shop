@@ -6,8 +6,18 @@
     align-items: $col;
 }
 
+// 定义background image
 @mixin backgroundImg($background:''){
     display: inline-block;
     background: url($background) no-repeat center;
     background-size: contain;
+}
+
+// 定义positon
+@mixin position($pos, $top:0, $left:0, $w:100%, $h:100%){
+    position: $pos;
+    top: $top;
+    left: $left;
+    width: $w;
+    height: $h;
 }

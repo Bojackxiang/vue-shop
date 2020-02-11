@@ -1,0 +1,56 @@
+// @import './assets/scss/reset.scss'
+// @import './assets/scss/config.scss'
+// @import './assets/scss/modal.scss'
+// 已经在app。vue里面引入了
+// ! 已经在app.vue中里面加载了，所以全局都可以使用
+
+.modal {
+  @include position(fixed, 0, 0); // note: 这边需要注意：modal的position需要时fixed才能滚动的时候也有效果
+  z-index: 10;
+  .mask {
+    @include position(absolute);
+    background-color: $colorI;
+    opacity: 0.5;
+    background-color: $colorI;
+  }
+  .modal-dialog {
+    @include position(absolute, 40%, 50%, 660px, auto);
+    background-color: $colorG;
+    transform: translate(-50%, -50%);
+    .modal-header{
+        height: 60px;
+        background-color: $colorJ;
+        padding: 0 25px;
+        line-height: 60px;
+        font-size: 16px;
+        font-size: $fontI;
+        .icon-close{
+            position: absolute;
+            top: 23px;
+            right: 25px;
+            width: 14px;
+            height: 14px;
+            background: url('/imgs/icon-close.png') no-repeat center;
+            background-size: contain;
+            transition: transform .3s;;
+            &:hover{
+                transform: scale(1.5);
+                transition: transform .3s;;
+            }
+        }
+
+    }
+    .modal-body{
+      padding: 42px 40px;
+      font-size: 14px;
+
+    }
+    .modal-footer{
+      height: 82px; 
+      line-height: 82px; 
+      text-align: center;
+      background-color: $colorJ;
+
+    }
+  }
+}
