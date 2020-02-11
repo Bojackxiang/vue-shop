@@ -101,7 +101,7 @@
                 <div class="item-info">
                   <h3>{{col.name}}</h3>
                   <p>{{col.subtitle}}</p>
-                  <p class="price">{{col.price}}元</p>
+                  <p class="price" @click="addCart">{{col.price}}元</p>
                 </div>
               </div>
             </div>
@@ -112,9 +112,18 @@
       <!-- 产品和竖着的banner end-->
 
       <!-- model 的控制 -->
-      <Modal modalTitle="信息框" sureText="查看购物车" btnType="1" modalType="middle" :showModal="showModal">
+      <!-- 将父组件里面的func ： submit 传给子组件 -->
+      <Modal
+        modalTitle="信息框"
+        sureText="查看购物车"
+        btnType="1"
+        modalType="middle"
+        :showModal="showModal"
+        @submit="goToCart"
+        @cancel="showModal = false"
+      >
         <!-- ! 插槽的使用方式: 新知识 -->
-        <template v-solt:body>  
+        <template v-solt:body>
           <p>商品添加成功</p>
         </template>
       </Modal>
@@ -217,7 +226,7 @@ export default {
         }
       ],
       phoneList: [],
-      showModal: true,
+      showModal: false
     };
   },
   mounted() {
@@ -238,6 +247,21 @@ export default {
         .then(data => {
           this.phoneList = [data.list.slice(0, 4), data.list.slice(4, 8)];
         });
+    },
+    addCart() {
+      this.showModal = true;
+      // this.axios.post('/carts', {
+      //   productId: id,
+      //   selected: true
+      // }).then(() => {
+
+      // }).catch(() => {
+      //   this.showModal = true;
+      // })
+    },
+    goToCart() {
+      console.log("go to cart");
+      this.$router.push("/cart");
     }
   },
   computed: {

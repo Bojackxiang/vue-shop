@@ -5,8 +5,13 @@
 // ! 已经在app.vue中里面加载了，所以全局都可以使用
 
 .modal {
-  @include position(fixed, 0, 0); // note: 这边需要注意：modal的position需要时fixed才能滚动的时候也有效果
+  @include position(
+    fixed,
+    0,
+    0
+  ); // note: 这边需要注意：modal的position需要时fixed才能滚动的时候也有效果
   z-index: 10;
+  transition: top 0.5s;
   .mask {
     @include position(absolute);
     background-color: $colorI;
@@ -17,40 +22,51 @@
     @include position(absolute, 40%, 50%, 660px, auto);
     background-color: $colorG;
     transform: translate(-50%, -50%);
-    .modal-header{
-        height: 60px;
-        background-color: $colorJ;
-        padding: 0 25px;
-        line-height: 60px;
-        font-size: 16px;
-        font-size: $fontI;
-        .icon-close{
-            position: absolute;
-            top: 23px;
-            right: 25px;
-            width: 14px;
-            height: 14px;
-            background: url('/imgs/icon-close.png') no-repeat center;
-            background-size: contain;
-            transition: transform .3s;;
-            &:hover{
-                transform: scale(1.5);
-                transition: transform .3s;;
-            }
+    .modal-header {
+      height: 60px;
+      background-color: $colorJ;
+      padding: 0 25px;
+      line-height: 60px;
+      font-size: 16px;
+      font-size: $fontI;
+      .icon-close {
+        position: absolute;
+        top: 23px;
+        right: 25px;
+        width: 14px;
+        height: 14px;
+        background: url("/imgs/icon-close.png") no-repeat center;
+        background-size: contain;
+        transition: transform 0.3s;
+        &:hover {
+          transform: scale(1.5);
+          transition: transform 0.3s;
         }
-
+      }
     }
-    .modal-body{
+    .modal-body {
       padding: 42px 40px;
       font-size: 14px;
-
     }
-    .modal-footer{
-      height: 82px; 
-      line-height: 82px; 
+    .modal-footer {
+      height: 82px;
+      line-height: 82px;
       text-align: center;
       background-color: $colorJ;
-
     }
+  }
+  //note: 重点：为整个modal添加动画：active结尾的要放在前面
+
+  // 进入到显示器的位置
+  &.slide-enter-active {
+    top: 0;
+  }
+  // 离开显示器（重新挪到上面）
+  &.slide-leave-active {
+    top: -100%;
+  }
+  // 刚开始的位置： 在显示器外面
+  &.slide-enter {
+    top: -100%;
   }
 }
