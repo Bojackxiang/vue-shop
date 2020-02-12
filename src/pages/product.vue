@@ -1,11 +1,11 @@
 <template>
   <div>
-    product
     <product-param name="name">
       <template v-slot:buy>
         <button class="btn">立即购买</button>
       </template>
     </product-param>
+    <div style="height: 1000px;"></div>
   </div>
 </template>
 
@@ -14,8 +14,9 @@ import ProductParam from "../components/ProductParam.vue";
 
 export default {
   name: "product",
-  components: { ProductParam }
+  components: { ProductParam },
 };
+
 </script>
 
 <style lang="scss">
