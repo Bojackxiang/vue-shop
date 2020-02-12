@@ -126,18 +126,6 @@ export default {
     }
   },
   computed: {
-    /**
-     * 用来解决数据加载的延迟完题
-     * ! 一旦检测到store里面的name产生变化，那么store直接就会重新赋值，然后返回给页面
-     * ! 这里也是一个重点
-     */
-    // username(){
-    //   return this.$store.state.username
-    // },
-    // cartCount(){
-    //   return this.$store.state.cartCount;
-    // }
-    // note: 解构的方式来做获取商品 
     ...mapState(['username', 'cartCount']),
   }
 };
