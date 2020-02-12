@@ -15,13 +15,19 @@ export default {
   },
   mounted() {
     this.getUser();
+    this.getCart();
   },
   methods:{
     // * 在这里尝试拉取用户信息
+    // ! 这里make request的时候数据存在延迟
+    /**
+     * 所以这里请求已经发送出去了，但是vuex里面却没有更新
+     */
     getUser(){
+      console.log('trying to get user')
       this.axios.get('/user/')
       .then(resp => {
-        console.log(resp)
+        this.$store.dispatch('saveUserName', resp.username)  // note: step 1 => 这里传给actions
       })
       // todo: 保存到vuex里面
     },
@@ -29,7 +35,7 @@ export default {
     getCart(){
       this.axios.get('/carts/products/sum')
       .then(res => {
-        console.log(res)
+        this.$store.dispatch('cartCount', res)
       })
     } 
   }

@@ -3,6 +3,7 @@ import router from "./router";
 import axios from "axios";
 import VueLazyload from "vue-lazyload";
 import VueCookie from "vue-cookie";
+import store from './store'
 
 import VueAxios from "vue-axios";
 import App from "./App.vue";
@@ -36,12 +37,12 @@ axios.interceptors.request.use(request => {
 axios.interceptors.response.use(response => {
   console.log("开始接受请求", { url: response.config.url });
   let res = response.data;
-  console.log(location.hash); // note: 之后在这里要判断：如果是普通网页，是直接允许用户进去的
+  // console.log(location.hash); // note: 之后在这里要判断：如果是普通网页，是直接允许用户进去的
   /**
    * ! solving problem
    * 解决了没有登陆的时候用户会直接跳转到登陆页面，而不是主页
    */
-  console.log(response.data);
+  // console.log(response.data);
   if (res.status === 0) {
     return response.data.data; // 如果成功了就直接返回数据
   } else if (res.status === 10) {
@@ -76,6 +77,7 @@ if (mock) {
 }
 
 new Vue({
+  store,
   router,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount("#app");

@@ -14,7 +14,7 @@
           <a href="javascript:;" v-if="!username" @click="login">登陆</a>
           <a href="javascript:;" v-if="!username">注册</a>
           <a href="javascript:;" class="my-cart" @click="goToCart">
-            <span class="icon-cart"></span>cart
+            <span class="icon-cart"></span>cart {{cartCount}}
           </a>
         </div>
       </div>
@@ -86,11 +86,11 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   name: "nav-header",
   data() {
     return {
-      username: "",
       phoneList: []
     };
   },
@@ -114,7 +114,9 @@ export default {
       this.$router.push('/cart').catch(() => {})
     },
     login(){
-      this.$router.push('/login').catch(() => {}) // 避免dulicate 的报错
+      this.$router.push('/login').catch(() => {
+
+      }) 
     }
   },
   filters: {
@@ -122,6 +124,21 @@ export default {
       if (!val) return "0.00"
       return `¥ ${val.toFixed(2)}元`;
     }
+  },
+  computed: {
+    /**
+     * 用来解决数据加载的延迟完题
+     * ! 一旦检测到store里面的name产生变化，那么store直接就会重新赋值，然后返回给页面
+     * ! 这里也是一个重点
+     */
+    // username(){
+    //   return this.$store.state.username
+    // },
+    // cartCount(){
+    //   return this.$store.state.cartCount;
+    // }
+    // note: 解构的方式来做获取商品 
+    ...mapState(['username', 'cartCount']),
   }
 };
 </script>

@@ -49,7 +49,9 @@
     </div>
   </div>
 </template>
+
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: "login",
   data() {
@@ -62,30 +64,22 @@ export default {
   methods: {
     login() {
       let { username, password } = this;
-      // catch 错误在拦截的时候就已经完成了
       this.axios
         .post("/user/login", {
           username,
           password
         })
         .then((res) => {
-          // note: 只要成功登陆就跳转
-          // note: 重点！
-          /**
-           * 这里需要注意，当我们登陆成功的时候，cookie会自动存储
-           * 在发送请求的时候，浏览器会自己吧cookie直接发给后段，
-           * ! 以上的概念非常重哟啊！！！
-           */
-          console.log(res)
+          this.saveUserName(res.username)
           this.$cookie.set("userId", res.id, {});
-          console.log(this.$cookie.get('userId'))
-          // todo: 保存用户名和信息
           this.$router.push("/index");
         })
         .catch(err => {
             console.log(err, '用户登录捕获到了异常')
-        })
+        });
     },
+    ...mapActions(['saveUserName']),
+    
     register() {
         console.log('开始注册')
         this.axios.post('/user/register', {
@@ -101,6 +95,7 @@ export default {
   }
 };
 </script>
+
 <style lang="scss">
 .login {
   .container {
