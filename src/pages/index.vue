@@ -101,7 +101,7 @@
                 <div class="item-info">
                   <h3>{{col.name}}</h3>
                   <p>{{col.subtitle}}</p>
-                  <p class="price" @click="addCart">{{col.price}}元</p>
+                  <p class="price" @click="addCart(col.id)">{{col.price}}元</p>
                 </div>
               </div>
             </div>
@@ -248,16 +248,19 @@ export default {
           this.phoneList = [data.list.slice(0, 4), data.list.slice(4, 8)];
         });
     },
-    addCart() {
+    addCart(id) {
       this.showModal = true;
-      // this.axios.post('/carts', {
-      //   productId: id,
-      //   selected: true
-      // }).then(() => {
-
-      // }).catch(() => {
-      //   this.showModal = true;
-      // })
+      this.axios.post('/carts', {
+        productId: id,
+        selected: true
+      }).then((res) => {
+        // 成功添加商品
+        this.modal = false;
+        this.$store.dispatch("saveCartCount", res.cartTotalQuantity);
+      }).catch(() => {
+        // 没有成功添加商品
+        this.showModal = true;
+      })
     },
     goToCart() {
       console.log("go to cart");

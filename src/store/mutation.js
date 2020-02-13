@@ -10,5 +10,11 @@ export default {
 
   cartCount(state, cartCount){
     state.cartCount = cartCount;
+  },
+
+  saveCartCount(state,){
+    
+    state.cartCount += 1
+
   }
 }

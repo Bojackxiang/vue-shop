@@ -1,7 +1,7 @@
 <template>
   <div class="nav-bar" :class="{'is_fixed':isFixed}">
     <div class="container">
-      <div class="pro-title">小米手机</div>
+      <div class="pro-title">{{name}}</div>
       <div class="pro-param">
         <a href="javascript:;">
           概述
@@ -38,7 +38,14 @@ export default {
     initHeight() {
       let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       this.isFixed = scrollTop >= 153 ? true : false;
+    },
+    buy(){
+      let productId = this.$route.params.id;
+      this.$router.push(`/detail/${productId}`)
+      console.log(productId)
+
     }
+
   },
   destroyed() {
     window.removeEventListener("scroll", this.initHeight, false);

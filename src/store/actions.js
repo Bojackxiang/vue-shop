@@ -4,5 +4,10 @@ export default {
   },
   cartCount(context, cartNum){
     context.commit('cartCount', cartNum)
+  },
+
+  saveCartCount(context, newAddedNum){
+    console.log(newAddedNum);
+    context.commit('saveCartCount', newAddedNum)
   }
 }
