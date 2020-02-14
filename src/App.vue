@@ -38,6 +38,7 @@ export default {
     // * 获取用户的购物车的信息
     getCart() {
       this.axios.get("/carts/products/sum").then(res => {
+        console.log('购物车 详情', res)
         this.$store.dispatch("cartCount", res);
       });
     }
@@ -52,3 +53,5 @@ export default {
   @import './assets/scss/modal.scss';
   @import './assets/scss/button.scss';
 </style>
+
+
