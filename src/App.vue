@@ -1,3 +1,4 @@
+
 <template>
   <div id="app">
     <router-view />
@@ -5,7 +6,7 @@
 </template>
 
 <script>
-// import storage from './storage/index'
+import util from "./util";
 
 export default {
   data() {
@@ -14,8 +15,10 @@ export default {
     };
   },
   mounted() {
-    this.getUser();
-    this.getCart();
+    if (this.$cookie.get("userId")) {
+      this.getUser();
+      this.getCart();
+    }
   },
   methods: {
     // * 在这里尝试拉取用户信息
@@ -24,23 +27,11 @@ export default {
      * 所以这里请求已经发送出去了，但是vuex里面却没有更新
      */
     getUser() {
-      console.log("trying to get user");
-      this.axios.get("/user/").then(resp => {
-        /**
-         * 如果返回的值是undefined => 意味着user没有login
-         */
-        if (!(resp === undefined)) {
-          this.$store.dispatch("saveUserName", resp.username); // note: step 1 => 这里传给actions
-        }
-      });
-      // todo: 保存到vuex里面
+      util.getUser(this.axios, this.$store);
     },
     // * 获取用户的购物车的信息
     getCart() {
-      this.axios.get("/carts/products/sum").then(res => {
-        console.log('购物车 详情', res)
-        this.$store.dispatch("cartCount", res);
-      });
+      util.getCart(this.axios, this.$store);
     }
   }
 };

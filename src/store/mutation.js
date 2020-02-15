@@ -13,8 +13,11 @@ export default {
   },
 
   saveCartCount(state,){
-    
     state.cartCount += 1
+  },
 
+  clearUserInfo(state){
+    state.username = '';
+    state.cartCount = 0;
   }
 }

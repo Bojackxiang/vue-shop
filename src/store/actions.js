@@ -9,5 +9,12 @@ export default {
   saveCartCount(context, newAddedNum){
     console.log(newAddedNum);
     context.commit('saveCartCount', newAddedNum)
+  },
+
+  // 清空vuex
+  clearUserInfo(context, ){
+    context.commit('clearUserInfo')
   }
+
+
 }

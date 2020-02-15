@@ -10,11 +10,14 @@
         </div>
         <div class="topbar-user">
           <a href="javascript:;" v-if="username">{{username}}</a>
+          <a href="javascript:;" v-if="username" @click="logout">退出</a>
           <a href="javascript:;" v-if="username">我的订单</a>
+
           <a href="javascript:;" v-if="!username" @click="login">登陆</a>
           <a href="javascript:;" v-if="!username">注册</a>
           <a href="javascript:;" class="my-cart" @click="goToCart">
-            <span class="icon-cart"></span>cart {{cartCount}}
+            <span class="icon-cart"></span>
+            cart {{cartCount}}
           </a>
         </div>
       </div>
@@ -86,7 +89,10 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from "vuex";
+import { Message } from "element-ui";
+import utils from '../util/index'
+
 export default {
   name: "nav-header",
   data() {
@@ -96,37 +102,56 @@ export default {
   },
   mounted() {
     this.getProductList();
+    console.log(this.$route.params);
+    if (this.$route.params === "from" && this.$router.params) this.get;
+      this.getCart();
   },
   methods: {
     getProductList() {
       this.axios
         .get("/products", {
-          params:{
-            categoryId:'100012',
-            pageSize:6
+          params: {
+            categoryId: "100012",
+            pageSize: 6
           }
         })
         .then(res => {
-          this.phoneList = res.list
+          this.phoneList = res.list;
         });
     },
-    goToCart(){
-      this.$router.push('/cart').catch(() => {})
-    },
-    login(){
-      this.$router.push('/login').catch(() => {
 
-      }) 
+    goToCart() {
+      this.$router.push("/cart").catch(() => {});
+    },
+
+    // 用户的登陆
+    login() {
+      this.$router.push("/login").catch(() => {});
+    },
+
+    // 用户的登出
+    logout() {
+      this.axios.post("/user/logout").then(() => {
+        Message.success("已成功登出");
+        this.$cookie.delete("userId");
+        this.$store.dispatch("clearUserInfo");
+      });
+    },
+
+    // 获取cart的信息
+    getCart() {
+      utils.getCart(this.axios, this.$store);
     }
   },
+
   filters: {
-    currency(val){
-      if (!val) return "0.00"
+    currency(val) {
+      if (!val) return "0.00";
       return `¥ ${val.toFixed(2)}元`;
     }
   },
   computed: {
-    ...mapState(['username', 'cartCount']),
+    ...mapState(["username", "cartCount"])
   }
 };
 </script>

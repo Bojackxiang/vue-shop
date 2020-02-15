@@ -4,6 +4,8 @@ import axios from "axios";
 import VueLazyload from "vue-lazyload";
 import VueCookie from "vue-cookie";
 import store from "./store";
+import "element-ui/lib/theme-chalk/index.css";
+import { Button } from "element-ui";
 
 import VueAxios from "vue-axios";
 import App from "./App.vue";
@@ -37,7 +39,6 @@ axios.interceptors.request.use(request => {
 axios.interceptors.response.use(response => {
   console.log("开始接受请求", { url: response.config.url });
   let res = response.data;
-
   if (res.status === 0) {
     return response.data.data; // 如果成功了就直接返回数据
   } else if (res.status === 10) {
@@ -52,7 +53,7 @@ axios.interceptors.response.use(response => {
     // 这边直接给异常，然后在下面的func里面自己的catch
     return Promise.reject(res);
   }
-})
+});
 
 /**
  * axios 的挂载和基本设置
@@ -64,6 +65,9 @@ Vue.use(VueLazyload, {
   attempt: 1
 });
 Vue.use(VueCookie);
+Vue.use(Button);
+
+// element ui 组件
 
 /**
  * mock 数据和操作

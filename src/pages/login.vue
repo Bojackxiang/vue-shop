@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 export default {
   name: "login",
   data() {
@@ -69,28 +69,37 @@ export default {
           username,
           password
         })
-        .then((res) => {
-          this.saveUserName(res.username)
-          this.$cookie.set("userId", res.id, {});
-          this.$router.push("/index");
+        .then(res => {
+          this.saveUserName(res.username);
+          this.$cookie.set("userId", res.id, { expires: "Session" });
+          // this.$router.push("/index?from=login");
+          this.$router.push({
+            name: "index", // ! 是index而不是home，到了home会跳转，所以找不到
+            params: {
+              from: "login"
+            }
+          });
         })
         .catch(err => {
-            console.log(err, '用户登录捕获到了异常')
+          console.log(err, "用户登录捕获到了异常");
         });
     },
-    ...mapActions(['saveUserName']),
-    
+    ...mapActions(["saveUserName"]),
+
     register() {
-        console.log('开始注册')
-        this.axios.post('/user/register', {
-            username: 'weijiexiang',
-            password: '111111',
-            email: 'admin@admin.com'
-        }).then(() => {
-            alert('register success');
-        }).catch(err=>{
-            console.log(err, '收到了异常')
+      console.log("开始注册");
+      this.axios
+        .post("/user/register", {
+          username: "weijiexiang",
+          password: "111111",
+          email: "admin@admin.com"
         })
+        .then(() => {
+          alert("register success");
+        })
+        .catch(err => {
+          console.log(err, "收到了异常");
+        });
     }
   }
 };

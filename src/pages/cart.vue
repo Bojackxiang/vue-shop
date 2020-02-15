@@ -24,7 +24,7 @@
                 <span
                   class="checkbox"
                   v-bind:class="{'checked':item.productSelected}"
-                  @click="updateCart(item)"
+                  @click="toggleSelect(item)"
                 ></span>
               </div>
               <div class="item-name">
@@ -68,6 +68,7 @@
 import NavFooter from "../components/NavFooter.vue";
 import ServiceBar from "../components/ServiceBar";
 import OrderHeader from "../components/OrderHeader";
+import { Message } from "element-ui";
 
 export default {
   name: "cart",
@@ -77,9 +78,11 @@ export default {
       list: [], //善品列表
       allChecked: false, // 是不是全选
       cartTotalPrice: 0, // 以佛那过多少件商品
-      checkedNum: 0 // 选中商品数量
+      checkedNum: 0, // 选中商品数量,
+      isModalActivated: false
     };
   },
+
   methods: {
     getCartList() {
       // 初始化数据
@@ -105,23 +108,31 @@ export default {
       this.allChecked = !this.allChecked;
     },
 
+    // then isChecked == true, then can make order request
     order() {
-      // 点击跳转到支付页面
+      let isChecked = this.isChecked();
+      if (isChecked === false) return Message.error("选择至少一个item");
+      this.$router.push("/order/confirm");
+    },
+
+    // check is there is at least one item
+    isChecked() {
+      return !this.list.every(item => item.productSelected === false);
     },
 
     updateCart(item, operation) {
       // 增加cart中商品的数量, toggle 单个商品
       let quantity = item.quantity,
         selected = item.productSelected;
-        console.log(item)
+
       if (!operation) {
         this.delProduct(item);
       } else {
         // add / minus the item
         if (operation === "-" && item.quantity === 1)
-          return alert("闪屏数量不能小于0");
-        if (operation === "+" && (quantity+1) > item.productStock)
-          return alert("超过了库存");
+          return Message.error('商品数目不能小于1')
+        if (operation === "+" && quantity + 1 > item.productStock)
+          return Message.error("超过了库存");
         if (operation === "-") --quantity;
         if (operation === "+") ++quantity;
       }
@@ -136,8 +147,22 @@ export default {
         });
     },
 
+    toggleSelect(item) {
+      // toggle single item select
+      Message.success('test')
+      let selected = !item.productSelected;
+      this.axios
+        .put(`/carts/${item.productId}`, {
+          selected
+        })
+        .then(toggleSelectResp => {
+          this.renderData(toggleSelectResp);
+        });
+    },
+
     delProduct(item) {
       // delete item
+      this.isModalActivated = true;
       this.axios.delete(`/carts/${item.productId}`).then(deleteResp => {
         this.renderData(deleteResp);
       });
