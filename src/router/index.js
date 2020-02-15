@@ -53,27 +53,37 @@ const routes = [
     component: OrderPage,
     children: [
       {
-        path: "/list",
+        path: "list",
         name: "list",
         component: OrderListPage
       },
       {
-        path: "/confirm",
+        path: "confirm",
         name: "order-confirm",
         component: OrderConfirmPage
+      },
+      {
+        path: "pay",
+        name: "order-page",
+        component: OrderPayPage
+      },
+      {
+        path: "alipay",
+        name: "alipay",
+        component: Alipay
       }
     ]
   },
-  {
-    path: "/pay",
-    name: "order-page",
-    component: OrderPayPage
-  },
-  {
-    path: "/alipay",
-    name: "alipay",
-    component: Alipay
-  },
+  // {
+  //   path: "/pay",
+  //   name: "order-page",
+  //   component: OrderPayPage
+  // },
+  // {
+  //   path: "/alipay",
+  //   name: "alipay",
+  //   component: Alipay
+  // },
   //note:  log in 页面
   {
     path: "/login",

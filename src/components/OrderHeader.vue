@@ -5,7 +5,7 @@
         <a href="/#/index"></a>
       </div>
       <div class="title">
-        <h2>{{title}}</h2>
+        <span>{{title}}</span>
         <slot name="tip"></slot>
       </div>
       <div class="username">
@@ -23,6 +23,9 @@ export default {
   props: ["title",],
   computed: {
     ...mapState(['username']),
+  },
+  mounted(){
+
   }
 };
 </script>
@@ -32,7 +35,6 @@ export default {
 @import "../assets/scss/mixin.scss";
 @import "../assets/scss/config.scss";
 .order-header {
-  height: 112px;
   padding: 30px 0;
   .container {
     .header-logo {
@@ -43,8 +45,10 @@ export default {
       display: inline-block;
       height: 55px;
       line-height: 55px;
-      h2 {
+      span {
         display: inline-block;
+        vertical-align: middle;
+
       }
     }
     .title {
