@@ -1,3 +1,12 @@
+// ✅ todo：完成狗玩按钮
+// ✅ todo：获取商品表单
+// ✅ todo：获取用户表单
+// ✅ todo: 表单的删除
+// ✅ todo: 表单的添加
+// ✅ todo: 表单的编辑 
+// todo: 表单的验证 
+// ✅ todo: order 的id不能够使地址的id，如果一个人提交了两个order 就会产生冲突
+ 
  <template>
   <div class="order-confirm">
     <svg
@@ -48,7 +57,13 @@
           <div class="item-address">
             <h2 class="addr-title">收货地址</h2>
             <div class="addr-list clearfix">
-              <div class="addr-info" v-for="(item, index) in list" :key="index">
+              <div
+                class="addr-info"
+                v-for="(item, index) in list"
+                :key="index"
+                :class="index === pickedAddress? 'checked':''"
+                @click="addressPicking(index)"
+              >
                 <h2>{{item.receiverName}}</h2>
                 <div class="phone">{{item.receiverMobile}}</div>
                 <div class="street">
@@ -65,14 +80,14 @@
                       <use xlink:href="#icon-del" />
                     </svg>
                   </a>
-                  <a href="javascript:;" class="fr">
+                  <a href="javascript:;" class="fr" @click="editAddrOpenModal(index)">
                     <svg class="icon icon-edit">
                       <use xlink:href="#icon-edit" />
                     </svg>
                   </a>
                 </div>
               </div>
-              <div class="addr-add" @click="showEditModal = true">
+              <div class="addr-add" @click="addNewAddressOpenModal()">
                 <div class="icon-add"></div>
                 <div>添加新地址</div>
               </div>
@@ -149,7 +164,7 @@
       btnType="1"
       :showModal="showEditModal"
       @cancel="showEditModal=false"
-      @submit="addressOperationSubmit('add')"  
+      @submit="addressOperationSubmit()"
     >
       <template v-slot:body>
         <div class="edit-wrap">
@@ -194,6 +209,8 @@ import Modal from "./../components/Modal";
 import { Message } from "element-ui";
 export default {
   name: "order-confirm",
+
+  // =====================================================
   data() {
     return {
       checkedItem: {}, // => form content
@@ -206,65 +223,48 @@ export default {
       cartList: [], // =>购物车结算列表
       cartTotalPrice: 0, // => total price for cart
       itemQuality: 0,
-      itemTotalQuantity: 0
+      itemTotalQuantity: 0,
+
+      pickedAddress: 0
     };
   },
+
+  // =====================================================
   components: {
     Modal
   },
+
+  // =====================================================
   methods: {
-    // ===========================================
     // => show checked item
     showCheckedItem() {
       console.log(this.checkedItem);
     },
 
-    // ===========================================
-    // => open the editor modal 
-    openAddressModal() {
-      this.showEditModal = true;
-    },
-
-    // ===========================================
-    // => close the modal 
+    // => close the modal
     closeModal() {
       console.log("已经确定点击");
-      Message.success("操作成功！");
       this.showEditModal = false;
       this.checkedItem = {};
       this.userAction = 0;
     },
-   
-   // =====================================================
-    // => submit the order
-    orderSubmit() {
-      this.$router.push({
-        path: "/order/pay",
-        query: {
-          orderNo: 123
-        }
-      });
-    },
 
-    // =====================================================
-    // => get address list 
+    // => get address list
     getAddrList() {
       this.axios.get("/shippings/").then(addrResp => {
         this.list = addrResp.list;
       });
     },
-    // =====================================================
-    // => get the cart list 
+
+    // => get the cart list
     getCartList() {
       // 获取购物车中所有的商品数据
       this.axios.get("/carts").then(cartResp => {
-        // ==================================
         // => total price of selected items
         this.cartList = cartResp.cartProductVoList.filter(
           item => item.productSelected
         );
         this.cartTotalPrice = cartResp.cartTotalPrice;
-        // =====================================
         // => calculate the total items
         let totalQuantity = 0;
         this.cartList.forEach(item => {
@@ -274,46 +274,66 @@ export default {
       });
     },
 
-    // =====================================================
     // => remove address
     removeAddress(index) {
-      console.log('delete address', index)
+      console.log("delete address", index);
       this.userAction = 2; // change the operation type
-      this.checkedItem = this.list[index] // change the chckeditem
+      this.checkedItem = this.list[index]; // change the chckeditem
       this.addressOperationSubmit();
     },
-    
-    // =====================================================
-    // => change the useraction when click different button 
-    changeUserAction(operation){
-      switch(operation){
-        case 'add': 
-          this.userAction = 0
+
+    // => address picking
+    addressPicking(index) {
+      this.pickedAddress = index;
+    },
+
+    // => change the useraction when click different button
+    changeUserAction(operation) {
+      switch (operation) {
+        case "add":
+          this.userAction = 0;
           break;
-        case 'edit': 
-          this.userAction = 1
+        case "edit":
+          this.userAction = 1;
           break;
-        case 'delete': 
-          this.userAction = 2
+        case "delete":
+          this.userAction = 2;
           break;
         default:
           break;
       }
     },
 
-    // =====================================================
-    // => handing the changes of the address operations
+    // => edit the address
+    editAddrOpenModal(index) {
+      this.userAction = 1;
+      // note: if not copy values, both value will be changed
+      // ! warning:  this.checkedItem = {...this.list[index]};
+      this.checkedItem = { ...this.list[index] };
+      this.showEditModal = true;
+    },
+
+    // => add new address
+    addNewAddressOpenModal() {
+      this.userAction = 0;
+      this.showEditModal = true;
+    },
+
+    // => handing the address request
     // add(0) / edit(1) / delete(2) the address and update
-    addressOperationSubmit(operations) {
-      this.changeUserAction(operations)
+    addressOperationSubmit() {
       let { userAction, checkedItem } = this;
-      let method, url, params=checkedItem;
+      console.log("user action");
+      console.log(userAction);
+      let method,
+        url,
+        params = checkedItem;
       switch (userAction) {
         case 0:
           (method = "post"), (url = "/shippings");
           break;
         case 1:
-          (method = "put"), (url = "/shippings");
+          (method = "put"), (url = `/shippings/${checkedItem.id}`);
           break;
         case 2:
           (method = "delete"), (url = `/shippings/${checkedItem.id}`);
@@ -327,8 +347,29 @@ export default {
         Message.success("操作成功");
       });
       this.closeModal();
+    },
+
+    // => submit the order
+    orderSubmit() {
+      let shippingId = this.list[this.pickedAddress].id;
+      this.axios
+        .post("/orders", { shippingId: shippingId })
+        .then((resp) => {
+          this.$router.push({
+            path: "/order/pay",
+            query: {
+              orderNo: resp.orderNo
+            }
+          });
+        })
+        .catch((err) => {
+          console.log(err)
+          Message.error("提交发生内部错误");
+        });
     }
   },
+
+  // =====================================================
   mounted() {
     this.getAddrList();
     this.getCartList();

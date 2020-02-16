@@ -25,7 +25,7 @@ export default {
     return {};
   },
   mounted() {
-    console.log('mounted is running ...')
+    console.log("mounted is running ...");
   },
 
   computed: {
@@ -41,6 +41,12 @@ export default {
           break;
         case "/order/confirm":
           title = "订单确认";
+          break;
+        case "/order/pay":
+          title = "订单支付";
+          break;
+        case "/order/alipay":
+          title = "支付宝支付";
           break;
         default:
           break;
