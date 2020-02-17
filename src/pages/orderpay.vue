@@ -102,21 +102,47 @@
         </div>
       </div>
     </div>
-    <scan-pay-code v-if="showPay"></scan-pay-code>
+    <!-- // ============================== wechat payment  ====================================-->
+    <scan-pay-code v-if="showPay" @close="closeWechatPay" :payImage="payImg"></scan-pay-code>
+
+    <!-- // ============================== 支付确认modal ====================================-->
+    <Modal
+      title="支付确认"
+      btnType=3
+      :showModal="doubleCheckModal"
+      sureText="查看订单"
+      cancelText="未支付"
+      @cancel="closeDoubleCheckModal()"
+      @submit="goOrderList"
+    >
+      <template v-slot:body>
+        <p>您确认是否完成支付？</p>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
+import QRCode from "qrcode";
+import ScanPayCode from "../components/ScanPayCode.vue";
+import Message from "element-ui";
+import Modal from "../components/Modal.vue";
+
 export default {
   name: "order-pay",
+  components: { Modal, ScanPayCode },
   // =====================================
   data() {
     return {
       orderNumber: this.$route.query.orderNo, // 获取order num
       showDetail: false,
-      showPay: false,
       receiverInfo: {},
-      selectedPayment: 0
+      paymenAmount: 0,
+      selectedPayment: 0,
+      showPay: false, // => wechat bar code display
+      payImg: "",
+      doubleCheckModal: false,
+      T: '', // 定时器
     };
   },
   // =====================================
@@ -125,9 +151,10 @@ export default {
   },
   // =====================================
   methods: {
-    // => get the order detail 
+    // => get the order detail
     getOrderDetail() {
       this.axios.get(`/orders/${this.orderNumber}`).then(orderResp => {
+        console.log(orderResp)
         this.receiverInfo = orderResp;
       });
     },
@@ -136,12 +163,72 @@ export default {
     // 0: alipay, 1: wechat
     paySubmit(index) {
       this.selectedPayment = index;
-      if(index === 0){
-        window.open(`/#/order/alipay?orderId=${this.orderNumber}`, '_blank')
+      // let orderId = this.$route.query.orderId;
+      if (index === 0) {
+        // => 支付宝支付
+        window.open(`/#/order/alipay?orderId=${this.orderNumber}`, "_blank");
+      } else {
+        // => 微信支付
+        this.axios
+          .post("/pay", {
+            orderId: this.$route.query.orderNo,
+            orderName: "Vue高仿小米商城",
+            amount: 0.01, //单位元
+            payType: 2 //1支付宝，2微信,
+          })
+          .then(res => {
+            // => 使用qrcode 来生成barcode
+            QRCode.toDataURL(res.content)
+              .then(url => {
+                this.payImg = url;
+                this.showPay = true;
+              })
+              .catch(() => {
+                Message.err("微信二维码生成失败");
+              });
+            this.showPay = true;
+            this.loopOrderState()
+          })
+          .catch(() => {
+            Message.err("请求的时候发生错误");
+          });
       }
+    },
+
+    // => 主动关闭 支付窗口 1 ： 已经支付， 2: 还没有支付
+    closeWechatPay() {
+      this.doubleCheckModal = true;
+    },
+
+    // => 关闭double check modal
+    closeDoubleCheckModal() {
+      this.doubleCheckModal = false;
+      this.showPay = false;
+      console.log('close ')
+      this.clearLoop();
+    },
+
+    // => 用户确认已经完成支付
+    goOrderList() {
+      this.clearLoop()
+      this.doubleCheckModal = false;
+      this.showPay = false;
+      this.$router.push('/order/list')
+    },
+
+    // => 重读查看当前订单状态
+    loopOrderState(){
+      this.T = setInterval(() => {
+        this.axios.get(`/orders/${this.orderNumber}`).then(res => {
+          console.log(res)
+        }) 
+      }, 2009)
+    },
+
+    clearLoop(){
+      clearInterval(this.T);
     }
-  }
-  // =====================================
+  },
 };
 </script>
 

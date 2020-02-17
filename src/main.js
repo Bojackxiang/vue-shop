@@ -6,13 +6,14 @@ import VueCookie from "vue-cookie";
 import store from "./store";
 import "element-ui/lib/theme-chalk/index.css";
 import { Button } from "element-ui";
-
 import VueAxios from "vue-axios";
+
+
 import App from "./App.vue";
 /**
  * axios的基础折纸
  */
-axios.defaults.timeout = 8000;
+axios.defaults.timeout = 10000;
 
 /**
  * 根据不同的环境变量做不同的请求地址
@@ -66,6 +67,7 @@ Vue.use(VueLazyload, {
 });
 Vue.use(VueCookie);
 Vue.use(Button);
+
 
 // element ui 组件
 

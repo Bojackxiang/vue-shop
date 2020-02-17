@@ -20,7 +20,7 @@
           <a href="javascript:;" class="btn" v-if="btnType==2" @click="$emit('submit')">确定</a>
           <!-- // note: 自定义确认和取消操作 -->
           <div class="btn-group" v-if="btnType==3">
-            <a href="javascript:;" class="btn">确定</a>
+            <a href="javascript:;" class="btn" @click="$emit('submit')">确定</a>
             <a href="javascript:;" class="btn btn-default" @click="$emit('cancel')">取消</a>
           </div>
         </div>
